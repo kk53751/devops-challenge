@@ -1,7 +1,7 @@
 
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-830c94e3" # Replace with a valid AMI ID for your region
+  ami           = "ami-0040d891e3c1949fc" # Replace with a valid AMI ID for your region
   instance_type = var.instance_type
 
   tags = {
