@@ -42,8 +42,3 @@
         groups: sudo
         state: present
 
-    - name: Set up SSH key for devops user
-      authorized_key:
-        user: devops
-        state: present
-        key: "{{ lookup('file', '/path/to/devops_public_key.pub') }}"
