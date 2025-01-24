@@ -1,0 +1,49 @@
+---
+- name: Configure Development VM
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - nginx
+          - git
+          - python3
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Configure default nginx webpage
+      copy:
+        dest: /var/www/html/index.html
+        content: "Welcome to the DevOps Challenge"
+
+    - name: Disable root login via SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+
+    - name: Set SSH port to 22
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?Port'
+        line: 'Port 22'
+
+    - name: Create devops user
+      user:
+        name: devops
+        shell: /bin/bash
+        groups: sudo
+        state: present
+
+    - name: Set up SSH key for devops user
+      authorized_key:
+        user: devops
+        state: present
+        key: "{{ lookup('file', '/path/to/devops_public_key.pub') }}"
