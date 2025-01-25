@@ -82,7 +82,8 @@ jobs:
       run: |
         terraform output -raw private_key > /tmp/private.pem
         cat /tmp/private.pem
-        export HOST="$(terraform output -raw instance_public_ip)"
+        terraform output -raw instance_public_ip > ip.txt
+        cat ip.txt
         echo $HOST
         # export CHEF_LICENSE="accept"
         # inspec init profile --platform os devops
