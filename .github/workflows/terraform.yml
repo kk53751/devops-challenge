@@ -81,7 +81,8 @@ jobs:
     - name: Get Instance Public IP
       id: get-ip
       run: |
-        echo "IP=$(terraform output -raw instance_public_ip)" >> $GITHUB_ENV
+        CLEAN_IP=$(terraform output -raw instance_public_ip | grep -Eo '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
+        echo "IP=$CLEAN_IP" >> $GITHUB_ENV
 
     - name: Run InSpec Profile
       run: |
