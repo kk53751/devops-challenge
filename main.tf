@@ -38,11 +38,11 @@ resource "null_resource" "setup_vm" {
 
   provisioner "local-exec" {
     command = <<EOT
-      echo "${tls_private_key.ssh_key.private_key_pem}" >> $PRIVATE_KEY
-      echo "${aws_instance.web_server.public_ip}" >> $INVENTORY
+      echo "${tls_private_key.ssh_key.private_key_pem}" >>/tmp/private.pem
+      echo "${aws_instance.web_server.public_ip}" >> inventory.txt
       chmod 600 /tmp/private.pem
-      ansible-playbook  -v -u ubuntu  setup_vm.yml -i $INVENTORY --private-key $PRIVATE_KEY
-      rm -f inventory /tmp/private.pem
+      sleep 120; ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key /tmp/private.pem
+      rm -f inventory.txt /tmp/private.pem
     EOT
     environment = {
       ANSIBLE_HOST_KEY_CHECKING = "False"
