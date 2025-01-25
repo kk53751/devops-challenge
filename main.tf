@@ -40,7 +40,7 @@ resource "null_resource" "setup_vm" {
     command = <<EOT
       echo "${tls_private_key.ssh_key.private_key_pem}" >> /tmp/private.pem
       echo "${aws_instance.web_server.public_ip}" >> inventory.txt
-      chmod 600 private.pem
+      chmod 600 /tmp/private.pem
       sleep 120; ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key /tmp/private.pem
     EOT
     environment = {
