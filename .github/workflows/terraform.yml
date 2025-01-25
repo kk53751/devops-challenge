@@ -74,6 +74,7 @@ jobs:
     - name: Run InSpec Profile
       run: |
         HOST=$(cat inventory.txt)
+        export CHEF_LICENSE="accept"
         inspec exec ./vm_configuration_checks.rb --target ssh://ubuntu@$HOST -i /tmp/private.pem --sudo
 
 
