@@ -34,6 +34,7 @@ resource "null_resource" "setup_vm" {
     instance_id = aws_instance.web_server.id
     public_ip   = aws_instance.web_server.public_ip
     private_key = tls_private_key.ssh_key.private_key_pem
+    always_run = "${timestamp()}"
   }
 
   provisioner "local-exec" {

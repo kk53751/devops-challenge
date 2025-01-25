@@ -66,10 +66,6 @@ jobs:
       run: |
         terraform apply plan.tfplan
 
-    # - name: Gather Env
-    #   run: |
-    #     echo "INSTANCE_IP=$(terraform output -raw instance_public_ip)" >> $GITHUB_ENV
-    #     echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
 
 
     - name: install chef
@@ -88,12 +84,8 @@ jobs:
       run: |
         terraform output -raw private_key > /tmp/private.pem
         cat /tmp/private.pem
-        # cat ip.txt
         echo $IP
-        # export CHEF_LICENSE="accept"
-        # inspec init profile --platform os devops
-        # inspec exec devops --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119
         inspec --version
-        inspec exec ./vm_configuration_checks.rb --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119  --chef-license="accept-silent" --target ssh://ubuntu@$IP -i /tmp/private.pem --sudo
+        inspec exec ./vm_configuration_checks.rb --chef-license-key ${{ secrets.INSPEC_LICENSE }}  --chef-license="accept-silent" --target ssh://ubuntu@$IP -i /tmp/private.pem --sudo
 
 
