@@ -54,44 +54,11 @@
     - name: Generate SSH key pair for devops user
       ansible.builtin.openssh_keypair:
         path: /home/devops/.ssh/id_rsa
+        owner: devops
+        group: devops
+        mode: '0600'
         type: rsa
         size: 2048
         state: present
-      register: ssh_key
 
-    - name: Copy public key to authorized_keys
-      ansible.builtin.copy:
-        src: "{{ ssh_key.public_key }}"
-        dest: /home/devops/.ssh/authorized_keys
-        owner: devops
-        group: devops
-        mode: '0600'
-
-    - name: Ensure correct permissions for authorized_keys
-      ansible.builtin.file:
-        path: /home/devops/.ssh/authorized_keys
-        owner: devops
-        group: devops
-        mode: '0600'
-    
-    # - name: Generate SSH key
-    #   command:
-    #     cmd: ssh-keygen -t rsa -b 2048 -f /home/devops/.ssh/id_rsa -N ""
-    #   args:
-    #     creates: /home/devops/.ssh/id_rsa
-
-    # - name: Copy public key to authorized_keys
-    #   copy:
-    #     src: /home/devops/.ssh/id_rsa.pub
-    #     dest: /home/devops/.ssh/authorized_keys
-    #     owner: devops
-    #     group: devops
-    #     mode: '0600'
-
-    # - name: Ensure .ssh directory has correct permissions
-    #   file:
-    #     path: /home/devops/.ssh
-    #     owner: devops
-    #     group: devops
-    #     mode: '0700'
 
