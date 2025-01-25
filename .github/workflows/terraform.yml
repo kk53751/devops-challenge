@@ -68,7 +68,7 @@ jobs:
 
     - name: Gather Env
       run: |
-        echo "INSTANCE_IP=$(terraform output instance_public_ip)" >> $GITHUB_ENV
+        echo "INSTANCE_IP=$(terraform output -raw instance_public_ip)" >> $GITHUB_ENV
         echo "PRIVATE_KEY=$(terraform output -raw private_key)" >> $GITHUB_ENV
 
 
