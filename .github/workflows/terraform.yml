@@ -85,6 +85,8 @@ jobs:
         HOST=$(terraform output -raw instance_public_ip)
         export CHEF_LICENSE="accept"
         export INSPEC_LICENSE_KEY="free-178aea45-29fb-4bf4-a436-432256575727-6119"
+        inspec init profile --platform os devops
+        inspec exec devops --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119
         inspec exec ./vm_configuration_checks.rb --target ssh://ubuntu@$HOST -i /tmp/private.pem --sudo
 
 
