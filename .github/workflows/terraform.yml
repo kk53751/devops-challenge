@@ -104,4 +104,7 @@ jobs:
         cat inventory.txt
     
     - name: Configure VM
-      run: ANSIBLE_HOST_KEY_CHECKING: "False"; ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key private.pem
+      run: |
+        export ANSIBLE_HOST_KEY_CHECKING: "False"
+        sleep 60
+        ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key private.pem
