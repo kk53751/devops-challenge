@@ -101,7 +101,7 @@ jobs:
       run: |
         ls -la
     
-    -name: Configure VM
-     run: ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key private.pem
-     env:
-      ANSIBLE_HOST_KEY_CHECKING = "False"
+    - name: Configure VM
+      run: ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key private.pem
+      env:
+        ANSIBLE_HOST_KEY_CHECKING = "False"
