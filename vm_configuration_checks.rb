@@ -21,7 +21,7 @@ control 'nginx-installation' do
     desc 'Ensure that the default nginx page displays the expected message'
     
     describe command('curl -s http://localhost') do
-      its('stdout') { should include 'Welcome to nginx!' } # Adjust this message as needed
+      its('stdout') { should include 'Welcome to the DevOps Challenge' } # Adjust this message as needed
     end
   end
   
