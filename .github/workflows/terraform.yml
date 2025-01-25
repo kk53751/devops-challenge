@@ -78,17 +78,23 @@ jobs:
         channel: current
         project: inspec
 
+    - name: Get Instance Public IP
+      id: get-ip
+      run: |
+        terraform output -raw instance_public_ip
+      env:
+        INSTANCE_PUBLIC_IP: $(terraform output -raw instance_public_ip)
+
     - name: Run InSpec Profile
       run: |
         terraform output -raw private_key > /tmp/private.pem
         cat /tmp/private.pem
-        echo "::set-output name=public_ip::$(terraform output -raw instance_public_ip)"
         # cat ip.txt
-        # echo $HOST
+        echo $INSTANCE_PUBLIC_IP
         # export CHEF_LICENSE="accept"
         # inspec init profile --platform os devops
         # inspec exec devops --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119
         inspec --version
-        inspec exec ./vm_configuration_checks.rb --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119  --chef-license="accept-silent" --target ssh://ubuntu@${{ steps.get-ip.outputs.public_ip }} -i /tmp/private.pem --sudo
+        inspec exec ./vm_configuration_checks.rb --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119  --chef-license="accept-silent" --target ssh://ubuntu@$INSTANCE_PUBLIC_IP -i /tmp/private.pem --sudo
 
 
