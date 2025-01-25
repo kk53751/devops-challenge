@@ -82,11 +82,12 @@ jobs:
       run: |
         terraform output -raw private_key > /tmp/private.pem
         cat /tmp/private.pem
-        HOST=$(terraform output -raw instance_public_ip)
+        export HOST="$(terraform output -raw instance_public_ip)"
+        echo $HOST
         # export CHEF_LICENSE="accept"
         # inspec init profile --platform os devops
         # inspec exec devops --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119
         inspec --version
-        inspec exec ./vm_configuration_checks.rb --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119  --chef-license="accept-silent" --log-level=debug --target ssh://ubuntu@3.8.130.100 -i /tmp/private.pem --sudo
+        inspec exec ./vm_configuration_checks.rb --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119  --chef-license="accept-silent" --target ssh://ubuntu@${HOST} -i /tmp/private.pem --sudo
 
 
