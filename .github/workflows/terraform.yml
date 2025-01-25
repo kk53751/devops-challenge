@@ -86,6 +86,7 @@ jobs:
         # export CHEF_LICENSE="accept"
         # inspec init profile --platform os devops
         # inspec exec devops --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119
+        inspec --version
         inspec exec ./vm_configuration_checks.rb --chef-license-key free-178aea45-29fb-4bf4-a436-432256575727-6119  --chef-license="accept-silent" --log-level=debug --target ssh://ubuntu@3.8.130.100 -i /tmp/private.pem --sudo
 
 
