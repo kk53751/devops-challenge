@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Setup VM'
     runs-on: ubuntu-24.04
     environment: production
 
@@ -25,12 +25,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4.2.2
 
-    - name: Install Ansible
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository --yes --update ppa:ansible/ansible
-        sudo apt-get install -y ansible
+    # - name: Install Ansible
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y software-properties-common
+    #     sudo add-apt-repository --yes --update ppa:ansible/ansible
+    #     sudo apt-get install -y ansible
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -64,3 +64,44 @@ jobs:
     - name: Terraform Apply
       #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
       run: terraform apply plan.tfplan
+
+    
+    - name: Upload Files as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: checkout-files
+        path: .
+        retention-days: 1
+
+  Ansible:
+    name: 'Configure VM'
+    runs-on: ubuntu-24.04
+    environment: production
+    needs: terraform
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: checkout-files
+
+    - name: Install Ansible
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository --yes --update ppa:ansible/ansible
+        sudo apt-get install -y ansible
+
+    - name: Check files
+      run: |
+        ls -la
+    
+    -name: Configure VM
+     run: ansible-playbook  -v -u ubuntu  setup_vm.yml -i inventory.txt --private-key private.pem
+     env:
+      ANSIBLE_HOST_KEY_CHECKING = "False"
