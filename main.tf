@@ -1,5 +1,3 @@
-
-
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -10,8 +8,6 @@ resource "aws_key_pair" "ec2_key_pair" {
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
-
-
 resource "aws_instance" "web_server" {
   ami                    = "ami-0040d891e3c1949fc" # Replace with a valid AMI ID for your region
   instance_type          = var.instance_type
@@ -19,7 +15,7 @@ resource "aws_instance" "web_server" {
   security_groups        = [aws_security_group.web_sg.name]
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   tags = {
-    Name = "WebServer"
+    Name = "WebServer1"
   }
 
   user_data = <<-EOF
@@ -49,8 +45,6 @@ resource "null_resource" "setup_vm" {
     }
   }
 }
-
-
 
 resource "aws_security_group" "web_sg" {
   name        = "web-sg"
