@@ -21,7 +21,7 @@
     - name: Configure default nginx webpage
       copy:
         dest: /var/www/html/index.html
-        content: "Welcome to the DevOps Challenge"
+        content: "Welcome 1 to the DevOps Challenge"
 
     - name: Disable root login via SSH
       lineinfile:
