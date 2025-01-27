@@ -1,5 +1,3 @@
-
-
 control 'nginx-installation' do
     impact 1.0
     title 'Check if nginx is installed and running'
